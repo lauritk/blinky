@@ -22,6 +22,9 @@ Rodent eyeblink detector for classical eyeblink conditioning. Used for high spee
 - Record
 
 ## TODO if time
+
+- Switch to Scikit-video for video i/o instead of OpenCV (http://www.scikit-video.org/stable/)
+
 ### Eyeblink detector
 - Docstrings
 - Save overwrite check/message
