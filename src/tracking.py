@@ -28,13 +28,13 @@ class Tracking:
     def haar_classifier(self, **kwargs):
         """Detects eye with haar classifier."""
         # Default settings for haar cascade classifier
-        scaleFactor = 1.05
+        scaleFactor = 1.01
         minNeighbors = 50
         minSize = (54, 54)
-        maxSize = (96, 96)
+        maxSize = (320, 320)
         select = 0
         name = 'haar'
-        maxMovement = 5
+        maxMovement = 16
 
         frame = self.frame.frame
 
@@ -86,8 +86,9 @@ class Tracking:
         return abs(point1[0] - point2[0]) + abs(point1[1] - point2[1])
 
     def _check_point_movement(self, points, maxMovement):
-        """Checks if the distance between two points is too long."""
-        if self._distance(points[0], points[1]) > maxMovement:
+        """Checks if the distance between two points is too long, but not too long."""
+        if self._distance(points[0], points[1]) > maxMovement and not (self._distance(points[0], points[1]) > maxMovement * 2):
+            print("Eye moved, getting current location.")
             return True
         else:
             return False

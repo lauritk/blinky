@@ -113,17 +113,28 @@ def run(input_file, parameters_file, output_file, cascade_file, gui):
 
     # Setup tracking and identify eye area
     tracker = Tracking(copy.deepcopy(cap.frame))
-    tracker.haar_classifier(cascadeFile=str(cascade_file), maxMovement=8)
+    tracker.haar_classifier(cascadeFile=str(cascade_file))
     haar_pt = tracker.get_tracking_point('haar')
+    while not haar_pt:
+        print("Did not find eye. Trying again next frame.")
+        cap.capture_frame()
+        tracker = Tracking(copy.deepcopy(cap.frame))
+        tracker.haar_classifier(cascadeFile=str(cascade_file))
+        haar_pt = tracker.get_tracking_point('haar')
 
     # Display video stats
     print("\nFrame count of the video: {}".format(int(cap.get_total_frames())))
     print("FPS of the video: {}".format(int(cap.get_fps())))
-    print("Runtime in seconds: {}".format(int(cap.get_total_frames()) / int(cap.get_fps())))
+    print("Runtime in seconds: {}".format(cap.get_lenght_in_s()))
 
     # Main loop
     # Rework to work with threading and in the tkinter mainloop
     while(cap.capture_open()):
+
+        if not haar_pt:
+            print("Did not find eye. Trying again.")
+            tracker.haar_classifier(cascadeFile=str(cascade_file))
+            haar_pt = tracker.get_tracking_point('haar')
 
         # Copy current frame to all filters and trackers
         pre_filt.frame = copy.deepcopy(cap.frame)
@@ -134,7 +145,7 @@ def run(input_file, parameters_file, output_file, cascade_file, gui):
 
 
         # Draw bounding box for detected area and select region of interest for the ouput frame
-        if haar_pt is not None:
+        if haar_pt is not None and haar_pt:
             disp_filt.draw_bounding_box(haar_pt, params.params['pad_val'])
             out_filt.crop_roi(haar_pt, params.params['pad_val'])
 
@@ -157,7 +168,7 @@ def run(input_file, parameters_file, output_file, cascade_file, gui):
             # Check status of preview and analyze buttons in the GUI
             if window.run or window.prev:
                 # Resets video before running analysis or previw
-                if window.reset:
+                if window.reset or not out_filt.frame.frame_num < cap.get_total_frames() - 1:
                     cap.reset()
                     window.reset = False
                 elif window.run:
@@ -190,7 +201,7 @@ def run(input_file, parameters_file, output_file, cascade_file, gui):
 
         # Detect eye location and update if tracking enabled
         if params.params['const_track']:
-            tracker.haar_classifier(cascadeFile=str(cascade_file), maxMovement=8, minSize=(24, 54))
+            tracker.haar_classifier(cascadeFile=str(cascade_file), minSize=(24, 54))
             haar_pt = tracker.get_tracking_point('haar')
 
     # Save data to csv if save flag enabled
