@@ -3,6 +3,11 @@ import numpy as np
 import copy
 from frame import Frame
 
+# TODO: select the closest of the detected points. Fix jumping bounding box.
+# TODO: Keep constant bounding box size
+# TODO: Fine tune bounding box location
+# TODO: Manual overdrive
+
 """Handles object detection, tracking and related functions."""
 class Tracking:
 
@@ -71,7 +76,6 @@ class Tracking:
 
             if prev_point:
                 # Checks if eye moved too much. Updates new location.
-                # TODO: Detect unrealistic jumps
                 points = ((prev_point['x'], prev_point['y']), (new_point['x'], new_point['y']))
                 if self._check_point_movement(points, maxMovement):
                     # print('Too much movement. Using new point!')

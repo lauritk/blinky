@@ -2,6 +2,7 @@ from pypylon import pylon
 from pypylon import genicam
 from pathlib import Path
 import cv2 as cv
+import skvideo.io
 import csv
 
 """Camera class for controlling and recording high speed video from Basler USB-cameras."""
@@ -25,6 +26,17 @@ class Camera:
         else:
             self.parameters = parameters
 
+        self.parameters['ffmpeg_param'] = {
+          '-vcodec': 'libx264',
+          '-preset': 'ultrafast',
+          '-crf': '22',
+          '-g': str(self.parameters['fps']),
+          '-framerate': str(self.parameters['fps']),
+          '-r': str(self.parameters['fps']),
+          '-keyint_min': str(self.parameters['fps']),
+          '-sc_threshold': '0'
+        }
+
         self.parameters['record'] = True
         self.parameters['output_csv'] = Path(self.parameters['output_file']).with_suffix('.csv')
         self.data_out = []
@@ -34,8 +46,10 @@ class Camera:
 
         # Setup converter
         self.converter = pylon.ImageFormatConverter()
+        # Convert to RGB8 to support skvideo
+        self.converter.OutputPixelFormat = pylon.PixelType_RGB8packed
         # Convert image BGR8 to support OpenCV
-        self.converter.OutputPixelFormat = pylon.PixelType_BGR8packed
+        # self.converter.OutputPixelFormat = pylon.PixelType_BGR8packed
         self.converter.OutputBitAlignment = pylon.OutputBitAlignment_MsbAligned
 
 
@@ -121,9 +135,11 @@ class Camera:
 
     def set_output_file(self):
         """Set OpenCV output file. -1 opens VFW dialog in Windows."""
-        self.output = cv.VideoWriter(self.parameters['output_file'],-1,
-                        self.parameters['fps'], (self.parameters['width'],
-                        self.parameters['height']))
+        # self.output = cv.VideoWriter(self.parameters['output_file'],-1,
+        #                 self.parameters['fps'], (self.parameters['width'],
+        #                 self.parameters['height']))
+        # Changed to support skvideo
+        self.output = skvideo.io.FFmpegWriter(self.parameters['output_file'], outputdict=self.parameters['ffmpeg_param'])
 
 
     def set_counter(self):
@@ -176,7 +192,10 @@ class Camera:
             if self.parameters['record']:
                 image = self.converter.Convert(self.grabResult)
                 img = image.GetArray()
-                self.output.write(img)
+                # Skvideo write
+                writer.writeFrame(img)
+                # OpenCV write
+                # self.output.write(img)
         elif not self.imageWindow.IsVisible():
                 self.camera.StopGrabbing()
         else:
@@ -221,4 +240,6 @@ class Camera:
             writer.writerows(self.data_out)
         # self.disable_chunks()
         # Release OpenCV output file
-        self.output.release()
+        # self.output.release()
+        # Close skvideo file
+        self.output.close()
