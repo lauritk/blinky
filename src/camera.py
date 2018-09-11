@@ -193,7 +193,7 @@ class Camera:
                 image = self.converter.Convert(self.grabResult)
                 img = image.GetArray()
                 # Skvideo write
-                writer.writeFrame(img)
+                self.output.writeFrame(img)
                 # OpenCV write
                 # self.output.write(img)
         elif not self.imageWindow.IsVisible():
