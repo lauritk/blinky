@@ -118,8 +118,8 @@ def run(input_file, parameters_file, output_file, cascade_file, gui):
 
     # Display video stats
     print("\nFrame count of the video: {}".format(int(cap.get_total_frames())))
-    print("FPS of the video: {}".format(int(cap.get_total_frames())))
-    print("Runtime in seconds: {}".format(int(cap.get_total_frames())))
+    print("FPS of the video: {}".format(int(cap.get_fps())))
+    print("Runtime in seconds: {}".format(int(cap.get_total_frames()) / int(cap.get_fps())))
 
     # Main loop
     # Rework to work with threading and in the tkinter mainloop
