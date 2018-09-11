@@ -23,7 +23,7 @@ def create_entry(default, text="Add text!"):
 
 def ask_file(file_title):
     """Asks output file name."""
-    return tk.filedialog.asksaveasfilename(title = "file_title", defaultextension='.avi', filetypes = (("video files","*.avi"),("all files","*.*")))
+    return tk.filedialog.asksaveasfilename(title = "file_title", defaultextension='.mp4', filetypes = (("video files","*.mp4"),("all files","*.*")))
 
 def set_parameters():
     """Updates parameters from text entries and updates cameras settings."""
@@ -101,7 +101,7 @@ cam = Camera(parameters)
 preview_video()
 
 # parameters = {
-#     'output_file': 'C:\MyTemp\Github\high-speed-video-eyeblink-detector/test.avi',
+#     'output_file': 'C:\MyTemp\Github\high-speed-video-eyeblink-detector/test.mp4',
 #     'width': 160,
 #     'height': 160,
 #     'fps': 200.0,

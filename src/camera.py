@@ -18,7 +18,7 @@ class Camera:
         if parameters is None:
             # Use defaults
             self.parameters = {
-                'output_file': 'output.avi',
+                'output_file': 'output.mp4',
                 'width': 160,
                 'height': 160,
                 'fps': 500.0,
