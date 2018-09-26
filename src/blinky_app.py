@@ -115,12 +115,12 @@ def run(input_file, parameters_file, output_file, cascade_file, gui):
     tracker = Tracking(copy.deepcopy(cap.frame))
     tracker.haar_classifier(cascadeFile=str(cascade_file))
     haar_pt = tracker.get_tracking_point('haar')
-    while not haar_pt:
-        print("Did not find eye. Trying again next frame.")
-        cap.capture_frame()
-        tracker = Tracking(copy.deepcopy(cap.frame))
-        tracker.haar_classifier(cascadeFile=str(cascade_file))
-        haar_pt = tracker.get_tracking_point('haar')
+    # while not haar_pt:
+    #     print("Did not find eye. Trying again next frame.")
+    #     cap.capture_frame()
+    #     tracker = Tracking(copy.deepcopy(cap.frame))
+    #     tracker.haar_classifier(cascadeFile=str(cascade_file))
+    #     haar_pt = tracker.get_tracking_point('haar')
 
     # Display video stats
     print("\nFrame count of the video: {}".format(int(cap.get_total_frames())))
