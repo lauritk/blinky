@@ -29,7 +29,7 @@ class Camera:
         self.parameters['ffmpeg_param'] = {
           '-vcodec': 'libx264',
           '-preset': 'ultrafast',
-          '-crf': '22',
+          '-crf': '28',
           '-g': str(self.parameters['fps']),
           '-framerate': str(self.parameters['fps']),
           '-r': str(self.parameters['fps']),
