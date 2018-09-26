@@ -21,10 +21,6 @@ Rodent eyeblink detector for classical eyeblink conditioning. Used for high spee
 - Preview camera output (still frame).
 - Record
 
-## TODO if time
-
-- Switch to Scikit-video for video i/o instead of OpenCV (http://www.scikit-video.org/stable/)
-
 ### Eyeblink detector
 - Docstrings
 - Save overwrite check/message
@@ -50,7 +46,7 @@ Rodent eyeblink detector for classical eyeblink conditioning. Used for high spee
 - Create Conda environment. if you wish.
 - Activate environment..
 - PIP install following packages:
-  - numpy, opencv-python, opencv-contrib-python, Pillow
+  - numpy, opencv-python, opencv-contrib-python, Pillow, scikit-video
 - In addition for video recorder install Basler Pylon SDK and pip pypylon
 
 ### Eyeblink detector
