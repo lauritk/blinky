@@ -38,7 +38,8 @@ class Camera:
         }
 
         self.parameters['record'] = True
-        self.parameters['output_csv'] = Path(self.parameters['output_file']).with_suffix('.csv')
+        file = Path(self.parameters['output_file'])
+        self.parameters['output_csv'] = file.parent / (file.stem + "_recording.csv")
         self.data_out = []
 
         self.counter = 0

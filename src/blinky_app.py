@@ -73,8 +73,8 @@ def run(input_file, parameters_file, output_file, cascade_file, gui):
         save = False
         window = init_gui()
         input_file = Path(window.ask_file("Input video file"))
-        output_file = input_file.with_suffix('.csv')
-        parameters_file = input_file.with_suffix('.prm')
+        output_file = input_file.parent / (input_file.stem + "_analysis.csv")
+        parameters_file = input_file.parent / (input_file.stem + "_analysis.prm")
 
     # Init Parameters object where all the parameters are saved
     params = Parameters(parameters_file)

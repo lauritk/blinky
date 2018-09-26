@@ -31,12 +31,12 @@ def process_args(args):
         if args.parameters:
             parameters_file = Path(args.parameters)
         else:
-            parameters_file = input_file.with_suffix('.prm')
+            parameters_file = input_file.parent / (input_file.stem + "_analysis.prm")
 
         if args.output:
             output_file = Path(args.output)
         else:
-            output_file = input_file.with_suffix('.csv')
+            output_file = input_file.parent / (input_file.stem + "_analysis.csv")
 
         if args.cascade:
             cascade_file = Path(args.cascade)
