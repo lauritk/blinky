@@ -125,7 +125,7 @@ class Camera:
             self.camera.CenterY = True
             # self.camera.OffsetY = 176
         if genicam.IsWritable(node_map.GetNode("PixelFormat")):
-            self.camera.PixelFormat = "Mono10"
+            self.camera.PixelFormat = "Mono8"
         if genicam.IsWritable(node_map.GetNode("AcquisitionFrameRateEnable")):
             self.camera.AcquisitionFrameRateEnable = True
         if genicam.IsWritable(node_map.GetNode("AcquisitionFrameRate")):
