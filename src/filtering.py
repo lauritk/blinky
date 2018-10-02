@@ -9,6 +9,15 @@ class VideoFiltering:
         """Adds frame to be filtered. All filtering is done to this frame."""
         self.frame = frame
 
+    def clahe(self, clip=2.0, tile=(8, 8)):
+        """CLAHE (Contrast Limited Adaptive Histogram Equalization) (https://docs.opencv.org/3.1.0/d5/daf/tutorial_py_histogram_equalization.html)"""
+        frame = self.frame.get_frame_hsv()
+        lum = frame[:, :, 2]
+        clahe = cv.createCLAHE(clipLimit=clip, tileGridSize=tile)
+        frame[:, :, 2] = clahe.apply(lum)
+        self.frame.set_frame_hsv(frame)
+        return self.frame.frame
+
     def blur(self, value=(7, 7)):
         """"Median blur filter."""
         frame = self.frame.frame

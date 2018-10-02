@@ -24,6 +24,8 @@ def init_gui():
 def set_controls(window, params):
     """Sets controls for the GUI. Default values from params dict. """
     if params is not None:
+        window.pre_brightness = window.create_scale(params['pre_b_val'], 0, 255, "Pre-detection brightness:" )
+        window.pre_contrast =  window.create_scale(params['pre_c_val'], 0, 255, "Pre-detection contrast:" )
         window.brightness = window.create_scale(params['b_val'], 0, 255, "Brightness:" )
         window.contrast =  window.create_scale(params['c_val'], 0, 255, "Contrast:" )
         window.threshold = window.create_scale(params['thres_val'], 0, 255, "Threshold:" )
@@ -36,6 +38,8 @@ def set_controls(window, params):
 def update_parameters(window, params):
     """Update parameters from GUI sliders."""
     if params is not None:
+        params.params['pre_b_val'] = window.pre_brightness.get()
+        params.params['pre_c_val'] = window.pre_contrast.get()
         params.params['b_val'] = window.brightness.get()
         params.params['c_val'] = window.contrast.get()
         params.params['thres_val'] = window.threshold.get()
@@ -87,6 +91,8 @@ def run(input_file, parameters_file, output_file, cascade_file, gui):
         # No parameter file, so using defaults
         print("No parameters file. Loading default parameters." )
         # Default parameters
+        params.params['pre_b_val'] = 128
+        params.params['pre_c_val'] = 0
         params.params['b_val'] = 118
         params.params['c_val'] = 61
         params.params['thres_val'] = 85
@@ -111,8 +117,13 @@ def run(input_file, parameters_file, output_file, cascade_file, gui):
     out_filt = VideoFiltering()
     disp_filt = VideoFiltering()
 
+    pre_filt.frame = copy.deepcopy(cap.frame)
+    pre_filt.clahe()
+    pre_filt.brightness_contrast(params.params['pre_b_val'], params.params['pre_c_val'])
+
+
     # Setup tracking and identify eye area
-    tracker = Tracking(copy.deepcopy(cap.frame))
+    tracker = Tracking(copy.deepcopy(pre_filt.frame))
     tracker.haar_classifier(cascadeFile=str(cascade_file))
     haar_pt = tracker.get_tracking_point('haar')
     # while not haar_pt:
@@ -132,16 +143,18 @@ def run(input_file, parameters_file, output_file, cascade_file, gui):
     while(cap.capture_open()):
 
         if not haar_pt:
-            print("Did not find eye. Trying again.")
+            # print("Did not find eye. Trying again.")
             tracker.haar_classifier(cascadeFile=str(cascade_file))
             haar_pt = tracker.get_tracking_point('haar')
 
         # Copy current frame to all filters and trackers
         pre_filt.frame = copy.deepcopy(cap.frame)
         out_filt.frame = copy.deepcopy(cap.frame)
-        disp_filt.frame = copy.deepcopy(cap.frame)
         # Tracking is done for pre filtered frame
+        pre_filt.clahe()
+        pre_filt.brightness_contrast(params.params['pre_b_val'], params.params['pre_c_val'])
         tracker.frame = copy.deepcopy(pre_filt.frame)
+        disp_filt.frame = copy.deepcopy(pre_filt.frame)
 
 
         # Draw bounding box for detected area and select region of interest for the ouput frame
