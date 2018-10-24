@@ -37,15 +37,15 @@ class Camera:
         #   #'-sc_threshold': '0'
         # }
 
-        self.parameters['ffmpeg_param_in'] = {
-            '-r': str(self.parameters['fps'])
-        }
+        # self.parameters['ffmpeg_param_in'] = {
+        #    '-r': str(self.parameters['fps'])
+        #}
 
         self.parameters['ffmpeg_param_out'] = {
             '-vcodec': 'libx264',
             '-preset': 'ultrafast',
-            '-crf': '18',
-            '-r': str(self.parameters['fps'])
+            '-crf': '8'
+            # '-r': str(self.parameters['fps'])
         }
 
         self.parameters['record'] = True
@@ -151,8 +151,8 @@ class Camera:
         #                 self.parameters['fps'], (self.parameters['width'],
         #                 self.parameters['height']))
         # Changed to support skvideo
-        self.output = skvideo.io.FFmpegWriter(self.parameters['output_file'], inputdict=self.parameters['ffmpeg_param_in'], outputdict=self.parameters['ffmpeg_param_out'])
-        # self.output = skvideo.io.FFmpegWriter(self.parameters['output_file'], outputdict=self.parameters['ffmpeg_param_out'])
+        # self.output = skvideo.io.FFmpegWriter(self.parameters['output_file'], inputdict=self.parameters['ffmpeg_param_in'], outputdict=self.parameters['ffmpeg_param_out'])
+        self.output = skvideo.io.FFmpegWriter(self.parameters['output_file'], outputdict=self.parameters['ffmpeg_param_out'])
 
     def set_counter(self):
         """Sets cameras frame counter (Counter1) and resets it."""
