@@ -30,8 +30,8 @@ class Camera:
           '-vcodec': 'libx264',
           '-preset': 'ultrafast',
           '-crf': '28',
-          '-framerate': str(self.parameters['fps']),
-          '-r': str(self.parameters['fps'])
+          '-framerate': str(self.parameters['fps'])
+          #'-r': str(self.parameters['fps'])
           #'-g': str(self.parameters['fps']),
           #'-keyint_min': str(self.parameters['fps']),
           #'-sc_threshold': '0'
