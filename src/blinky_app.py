@@ -168,7 +168,7 @@ def run(input_file, parameters_file, output_file, cascade_file, gui):
             # Check status of preview and analyze buttons in the GUI
             if window.run or window.prev:
                 # Resets video before running analysis or previw
-                if window.reset or not out_filt.frame.frame_num < cap.get_total_frames() - 1:
+                if window.reset or (window.prev and not out_filt.frame.frame_num < cap.get_total_frames() - 1):
                     cap.reset()
                     window.reset = False
                 elif window.run:
