@@ -2,6 +2,8 @@
 
 Rodent eyeblink detector for classical eyeblink conditioning. Used for high speed videos captured from Basler's acA640-750um. Contains custom video recorder for Basler USB-cameras (may work with others too) made with PyPylon. Image processing done with OpenCV and GUI with python's Tkinter.
 
+Note: Program is at initial prototype state, but still usable.
+
 ## Features
 ### Eyeblink detector
 - Detect eye with haar cascade. Cascade from human eye, but works well with animals too.
